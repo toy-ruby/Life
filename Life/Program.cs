@@ -17,7 +17,9 @@ namespace Life
 
             initializeGrid(currentGrid);
             printGrid(currentGrid);
-            
+            string[] testCoords = { "2,4", "0 1", "4: 2" };    // DEBUG
+            setupGrid(currentGrid, testCoords);
+            printGrid(currentGrid);         
         }
 
         static void initializeGrid(int[,] grid)
@@ -26,7 +28,7 @@ namespace Life
             {
                 for (int j = 0; j < Math.Sqrt(grid.Length); j++)
                 {
-                    grid[i, j] = 1;
+                    grid[i, j] = 0;
                 }
             }
         }
@@ -43,6 +45,26 @@ namespace Life
                 Console.Write("\n");
             }
             Console.ReadLine();
+        }
+
+        static void calculateNextGrid(int[,] grid)
+        {
+            
+        }
+
+        static void setupGrid(int[,] grid, string[] coords = null)
+        {
+            if(coords != null)
+            {
+                foreach(string coord in coords)
+                {
+                    char[] delimiter = " ,:".ToCharArray();
+                    int x = Convert.ToInt32(coord.Split(delimiter, 2)[0]);
+                    int y = Convert.ToInt32(coord.Split(delimiter, 2)[1]);
+                    grid[x, y] = 1;
+                }
+            }
+            return;
         }
     }
 }
