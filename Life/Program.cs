@@ -16,10 +16,8 @@ namespace Life
             int[,] nextGrid = new int[size, size];
 
             initializeGrid(currentGrid);
+            setupGrid(currentGrid);
             printGrid(currentGrid);
-            string[] testCoords = { "2,4", "0 1", "4: 2" };    // DEBUG
-            setupGrid(currentGrid, testCoords);
-            printGrid(currentGrid);         
         }
 
         static void initializeGrid(int[,] grid)
@@ -47,16 +45,11 @@ namespace Life
             Console.ReadLine();
         }
 
-        static void calculateNextGrid(int[,] grid)
-        {
-            
-        }
-
         static void setupGrid(int[,] grid, string[] coords = null)
         {
-            if(coords != null)
+            if (coords != null)
             {
-                foreach(string coord in coords)
+                foreach (string coord in coords)
                 {
                     char[] delimiter = " ,:".ToCharArray();
                     int x = Convert.ToInt32(coord.Split(delimiter, 2)[0]);
@@ -64,7 +57,26 @@ namespace Life
                     grid[x, y] = 1;
                 }
             }
-            return;
+            else
+            {
+                // Randomly generate set of coordinates for setup
+                var rand = new Random();
+                int count = rand.Next(0, grid.Length);
+                string[] ary = new string[count];
+                for (int i = 0; i < count; i++)
+                {
+                    int x = rand.Next(0, grid.GetLength(0));
+                    int y = rand.Next(0, grid.GetLength(0));
+                    ary[i] = Convert.ToString(x) + " " + Convert.ToString(y);
+                }
+                // Recursively call setupGrid with random coords
+                setupGrid(grid, ary);
+            }
+        }
+
+        static void calculateNextGrid(int[,] grid)
+        {
+
         }
     }
 }
