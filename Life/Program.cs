@@ -43,7 +43,7 @@ namespace Life
             {
                 for (int j = 0; j < Math.Sqrt(grid.Length); j++)
                 {
-                    Console.Write(grid[i, j]);
+                    Console.Write(grid[i,j]);
                 }
                 Console.Write("\n");
             }
@@ -133,9 +133,17 @@ namespace Life
                     switch(count)
                     {
                         case 8:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            continue;
                         case 7:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            continue;
                         case 6:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            continue;
                         case 5:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            continue;
                         case 4:
                             nextGrid[x, y] = 0;
                             break;
@@ -144,11 +152,12 @@ namespace Life
                             break;
                         case 2:
                         case 1:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            continue;
                         default:
                             if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
                             break;
                     }
-
                 }
             }
         }
