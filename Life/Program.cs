@@ -10,18 +10,23 @@ namespace Life
     {
         static void Main(string[] args)
         {
+            // get dimension of SQUARE grid
             Console.Write("Enter grid size: ");
             int size = Convert.ToInt32(Console.ReadLine());
             int[,] currentGrid = new int[size, size];
             int[,] nextGrid = new int[size, size];
+            string[] coords = { "1 1" };
 
             initializeGrid(currentGrid);
             setupGrid(currentGrid);
             printGrid(currentGrid);
+            calculateNextGrid(currentGrid, nextGrid);
+            printGrid(nextGrid);
         }
 
         static void initializeGrid(int[,] grid)
         {
+            // set grid to 0s
             for (int i = 0; i < Math.Sqrt(grid.Length); i++)
             {
                 for (int j = 0; j < Math.Sqrt(grid.Length); j++)
@@ -74,9 +79,102 @@ namespace Life
             }
         }
 
-        static void calculateNextGrid(int[,] grid)
+        static void calculateNextGrid(int[,] currGrid, int[,] nextGrid)
         {
+            int[] currentIndex = new int[2];
+            uint xLength = Convert.ToUInt16(currGrid.GetLength(0) - 1);
+            uint yLength = Convert.ToUInt16(currGrid.GetLength(1) - 1);
+            for (int x = 0; x < currGrid.GetLength(0); x++)
+            {
+                for (int y = 0; y < currGrid.GetLength(0); y++)
+                {
+                    int count = 0;
+                    if (x > 0)
+                    {
+                        // left one
+                        if (currGrid[x - 1, y] == 1) count++;
+                    }
+                    if (x < currGrid.GetLength(0) - 1)
+                    {
+                        // right one
+                        if (currGrid[x + 1, y] == 1) count++;
+                    }
+                    if (y > 0)
+                    {
+                        // up one
+                        if (currGrid[x, y - 1] == 1) count++;
+                    }
+                    if (y < currGrid.GetLength(1) - 1)
+                    {
+                        // down one
+                        if (currGrid[x, y + 1] == 1) count++;
+                    }
+                    if (x > 0 && y > 0)
+                    {
+                        // up & left one
+                        if (currGrid[x - 1, y - 1] == 1) count++;
+                    }
+                    if (x < currGrid.GetLength(0) - 1 && y < currGrid.GetLength(1) - 1)
+                    {
+                        // down & right one
+                        if (currGrid[x + 1, y + 1] == 1) count++;
+                    }
+                    if(x > 0 && y < currGrid.GetLength(1) - 1)
+                    {
+                        // down & left one
+                        if (currGrid[x - 1, y + 1] == 1) count++;
+                    }
+                    if(x < currGrid.GetLength(0) - 1 && y > 0)
+                    {
+                        // up & right
+                        if (currGrid[x + 1, y - 1] == 1) count++;
+                    }
+                    
+                    switch(count)
+                    {
+                        case 8:
+                        case 7:
+                        case 6:
+                        case 5:
+                        case 4:
+                            nextGrid[x, y] = 0;
+                            break;
+                        case 3:
+                            if (currGrid[x, y] == 0) nextGrid[x, y] = 1;
+                            break;
+                        case 2:
+                        case 1:
+                        default:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            break;
+                    }
 
+                }
+            }
+        }
+
+        static bool isLeft(int[] ind)
+        {
+            if (ind[0] == 0) return true;
+            return false;
+        }
+
+        static bool isRight(int[] ind)
+        {
+            if (ind[1] == 0) return true;
+            return false;
+        }
+
+        static bool isTop(int[] ind, int len)
+        {
+            if (ind[0] == len) return true;
+            return false;
+        }
+
+        static bool isBottom(int[] ind, int len)
+        {
+            if (ind[0] == len) return true;
+            return false;
         }
     }
 }
