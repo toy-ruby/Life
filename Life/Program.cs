@@ -10,18 +10,31 @@ namespace Life
     {
         static void Main(string[] args)
         {
+            bool quit = false;
+
             // get dimension of SQUARE grid
             Console.Write("Enter grid size: ");
             int size = Convert.ToInt32(Console.ReadLine());
-            int[,] currentGrid = new int[size, size];
-            int[,] nextGrid = new int[size, size];
-            string[] coords = { "1 1" };
 
-            initializeGrid(currentGrid);
-            setupGrid(currentGrid);
-            printGrid(currentGrid);
-            calculateNextGrid(currentGrid, nextGrid);
-            printGrid(nextGrid);
+            while (!quit)
+            {
+                int[,] currentGrid = new int[size, size];
+                int[,] nextGrid = new int[size, size];
+                string[] coords = { "0 0", "2 1", "3 2", "2 2", "2 3", "1 3", "2 3", "1 4" };
+
+                initializeGrid(currentGrid);
+                //setupGrid(currentGrid);
+                setupGrid(currentGrid, coords);
+
+                printGrid(currentGrid);
+                calculateNextGrid(currentGrid, nextGrid);
+                printGrid(nextGrid);
+
+                if (Console.ReadLine() != "")
+                {
+                    quit = true;
+                }
+            }
         }
 
         static void initializeGrid(int[,] grid)
@@ -39,11 +52,11 @@ namespace Life
         static void printGrid(int[,] grid)
         {
             // Print out grid
-            for (int i = 0; i < Math.Sqrt(grid.Length); i++)
+            for (int j = 0; j < Math.Sqrt(grid.Length); j++)
             {
-                for (int j = 0; j < Math.Sqrt(grid.Length); j++)
+                for (int i = 0; i < Math.Sqrt(grid.Length); i++)
                 {
-                    Console.Write(grid[i,j]);
+                    Console.Write(grid[i, j]);
                 }
                 Console.Write("\n");
             }
@@ -82,8 +95,8 @@ namespace Life
         static void calculateNextGrid(int[,] currGrid, int[,] nextGrid)
         {
             int[] currentIndex = new int[2];
-            uint xLength = Convert.ToUInt16(currGrid.GetLength(0) - 1);
-            uint yLength = Convert.ToUInt16(currGrid.GetLength(1) - 1);
+            uint xMax = Convert.ToUInt16(currGrid.GetLength(0) - 1);
+            uint yMax = Convert.ToUInt16(currGrid.GetLength(1) - 1);
             for (int x = 0; x < currGrid.GetLength(0); x++)
             {
                 for (int y = 0; y < currGrid.GetLength(0); y++)
@@ -119,18 +132,18 @@ namespace Life
                         // down & right one
                         if (currGrid[x + 1, y + 1] == 1) count++;
                     }
-                    if(x > 0 && y < currGrid.GetLength(1) - 1)
+                    if (x > 0 && y < currGrid.GetLength(1) - 1)
                     {
                         // down & left one
                         if (currGrid[x - 1, y + 1] == 1) count++;
                     }
-                    if(x < currGrid.GetLength(0) - 1 && y > 0)
+                    if (x < currGrid.GetLength(0) - 1 && y > 0)
                     {
                         // up & right
                         if (currGrid[x + 1, y - 1] == 1) count++;
                     }
-                    
-                    switch(count)
+
+                    switch (count)
                     {
                         case 8:
                             if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
@@ -148,12 +161,21 @@ namespace Life
                             nextGrid[x, y] = 0;
                             break;
                         case 3:
-                            if (currGrid[x, y] == 0) nextGrid[x, y] = 1;
+                            if (currGrid[x, y] == 0)
+                            {
+                                nextGrid[x, y] = 1;
+                            }
+                            nextGrid[x, y] = 1;
                             break;
                         case 2:
+                            nextGrid[x, y] = currGrid[x, y];
+                            break;
                         case 1:
                             if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
                             continue;
+                        case 0:
+                            if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
+                            break;
                         default:
                             if (currGrid[x, y] == 1) nextGrid[x, y] = 0;
                             break;
